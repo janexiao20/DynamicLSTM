@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tensorflow.keras.layers import LSTMCell
 import numpy as np
 
 def conv2d(input_, output_dim, k_h, k_w, name="conv2d"):
@@ -182,7 +183,7 @@ def hyper_bias(layer, hyper_output, embedding_size, num_units,
       weight_start=0.00, use_bias=False, scope="beta")
   return layer + beta
 
-class LSTMCell(tf.contrib.rnn.RNNCell):
+class CustomLSTMCell(LSTMCell):
   """
   Layer-Norm, with Ortho Initialization and
   Recurrent Dropout without Memory Loss.
