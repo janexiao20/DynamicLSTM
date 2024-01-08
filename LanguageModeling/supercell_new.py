@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tensorflow.keras.layers import LSTMCell
 import numpy as np
 
 def conv2d(input_, output_dim, k_h, k_w, name="conv2d"):
@@ -182,7 +183,7 @@ def hyper_bias(layer, hyper_output, embedding_size, num_units,
       weight_start=0.00, use_bias=False, scope="beta")
   return layer + beta
 
-class LSTMCell(tf.contrib.rnn.RNNCell):
+class CustomLSTMCell(LSTMCell):
   """
   Layer-Norm, with Ortho Initialization and
   Recurrent Dropout without Memory Loss.
@@ -300,7 +301,7 @@ class LSTMCell(tf.contrib.rnn.RNNCell):
 
     return new_h, tf.contrib.rnn.LSTMStateTuple(new_c, new_h)
 
-class HyperLSTMCell(tf.contrib.rnn.RNNCell):
+class HyperLSTMCell(LSTMCell):
   '''
   HyperLSTM, with Ortho Initialization,
   Layer Norm and Recurrent Dropout without Memory Loss.
@@ -350,8 +351,7 @@ class HyperLSTMCell(tf.contrib.rnn.RNNCell):
 
   @property
   def state_size(self):
-    return tf.contrib.rnn.LSTMStateTuple(self.num_units+self.hyper_num_units,
-                                         self.num_units+self.hyper_num_units)
+    return tf.TensorShape([self.num_units + self.hyper_num_units, self.num_units + self.hyper_num_units])
 
   def __call__(self, input_all, state, timestep = 0, scope=None):
     with tf.variable_scope(scope or type(self).__name__):
