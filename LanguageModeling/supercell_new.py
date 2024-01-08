@@ -1,4 +1,8 @@
-import tensorflow as tf
+# 替换之前的导入
+# from tensorflow.contrib.rnn import RNNCell
+
+# 新的导入
+from tensorflow.compat.v1.nn.rnn_cell import RNNCell
 import numpy as np
 
 def conv2d(input_, output_dim, k_h, k_w, name="conv2d"):
