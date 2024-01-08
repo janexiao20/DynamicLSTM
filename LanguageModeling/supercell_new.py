@@ -1,4 +1,5 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import numpy as np
 
 def conv2d(input_, output_dim, k_h, k_w, name="conv2d"):
